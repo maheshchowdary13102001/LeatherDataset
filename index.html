@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Leather Defect Detection</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+      h1{
+        margin: 0;
+        font-size: 32px;
+        font-weight: 500;
+        color: #fff;
+        padding:0 0 6vh;
+      }
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+        border-radius: 5px;
+      }
+      body{
+        min-height: 100vh;
+        background: #5256ad;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .main-body{
+        display: flex;
+        flex-direction: row;
+      }
+      .drag-area{
+        border:2px solid #fff;
+        height: 45vh;
+        width: 40vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+      #result{
+        margin-left: 1vw;
+        border: 2px solid #fff;
+        height: 45vh;
+        width: 40vw;
+      }
+      .sub-main-body{
+        margin-right: 1vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      #clear-btn{
+        margin-top:10px;
+        margin-right: 0.5vw;
+        padding: 7px;
+        font-size: 20px;
+        color: #fff;
+        background-color: orange;
+        border: 0;
+        width: 19.35vw;
+      }
+      #predict-btn{
+        margin-top:10px;
+        margin-left: 0.5vw;
+        width: 19.35vw;
+        border: 0;
+        padding: 7px;
+        font-size: 20px;
+        color:#5256ad;
+        background-color: white;
+        font-weight: 500;
+      }
+      .drag-area .icon{
+        font-size: 70px;
+        color: #fff;
+      }
+      .drag-area header{
+        font-size: 20px;
+        font-weight: 500;
+        color: #fff;
+      }
+      .drag-area span{
+        font-size: 15px;
+        font-weight: 400;
+        color: #fff;
+        margin: 10px 0 15px 0;
+      }
+      .drag-area button{
+        padding: 5px 15px;
+        font-size: 17px;
+        font-weight: 450;
+        border: none;
+        outline: none;
+        background: #fff;
+        color: #5256ad;
+      }
+      button{
+        cursor: pointer;
+      }
+      .drag-area img{
+        height: 100%;
+        object-fit: cover;
+      }
+      #result_header{
+        color: white;
+        margin-top: 6px;
+        margin-left: 12px;
+      }
+      @media screen and (max-width: 1000px){
+        /* .drag-area header,.drag-area button,.drag-area span,.drag-area .icon{
+          font-size: 40px;
+        } */
+        /* h1{
+          font-size: 60px;
+        } */
+        .main-body{
+          flex-direction: column;
+        }
+        .drag-area img{
+          height:max-content;
+          width: max-content;
+        }
+        #result{
+          /* font-size: 45px; */
+          margin: 7vh 0 0 0;
+          width: 90vw;
+          height: fit-content;
+        }
+        .drag-area{
+          margin: 0;
+          width: 90vw;
+        }
+        #clear-btn,#predict-btn{
+          width: 44.3vw;
+          margin-top: 10px;
+          padding: 10px 20px;
+          /* font-size: 40px; */
+        }
+      }
+    </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <h1>Leather Defect Detection</h1>
+    <div class="main-body"> 
+      <div class="sub-main-body">
+        <div class="drag-area" id="cl1">
+          <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
+          <header>Drag & Drop to Upload File</header>
+          <span>- or -</span>
+          <button>Browse File</button>
+          <input type="file" hidden>
+        </div>
+        <div class="drag-area" style="display: none;" id="cl2"></div>
+        <div>
+          <button id="clear-btn" onclick="clearImage()">Clear</button>
+          <button id="predict-btn" onclick="classifyImage()">Predict</button>
+        </div>
+      </div>
+      <div id="result">
+        <div id="result_header">Result</div>
+      </div>
+    </div>
+
+    <script>
+      let file;
+      // Clear Image
+      const dropArea = document.querySelector(".drag-area");
+      const btn = dropArea.querySelector("button");
+      const input = dropArea.querySelector("input");
+      const tog1 = document.getElementById("cl1");
+      let tog2 = document.getElementById("cl2");
+      btn.onclick = ()=>{
+        input.click();
+      }
+      input.addEventListener("change",function(){
+        file = this.files[0];
+        showFile();
+      })
+
+      dropArea.addEventListener("dragover",(event)=>{
+        event.preventDefault();
+      })
+      dropArea.addEventListener("drop",(event)=>{
+        event.preventDefault();
+        file = event.dataTransfer.files[0];
+        showFile();
+      })
+
+      function showFile(){
+        let validExtensions = ["image/jpeg","image/jpg","image/png"]
+        if (validExtensions.includes(file.type)){
+          let fileReader = new FileReader();
+          fileReader.onload = ()=>{
+            let fileURL = fileReader.result;
+            let imgTag = `<img src="${fileURL}" alt="">`;
+            Toggle();
+            tog2.innerHTML = imgTag;
+          }
+          fileReader.readAsDataURL(file);
+        }
+        else{
+          alert("This is not an image file");
+        }
+      }
+
+      function Toggle() {
+        if (tog1.style.display === "none") {
+          tog1.style.display = "flex";
+          tog2.style.display = "none";
+        } else {
+          tog1.style.display = "none";
+          tog2.style.display = "flex";
+        }
+      }
+      
+      function clearImage(){
+        file = null;
+        Toggle();
+      }
+
+
+
+      //RestAPI contacting
+      async function classifyImage() {
+        const imageFile = document.getElementById('');
+        if (imageFile){
+          const formData = new FormData();
+          formData.append('image', imageFile);
+          axios.post('http://127.0.0.1:5000/predict', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then(response => {
+            document.getElementById('result').innerHTML = response.data;
+          })
+          .catch(error => console.log(error));
+        }
+        else{
+          alert("Please Upload an Image")
+        }
+      }
+
+      
+    </script>
+  </body>
+</html>
