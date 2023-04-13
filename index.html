@@ -62,7 +62,6 @@
         border: 0;
         width: 19.35vw;
       }
-      
       #predict-btn{
         margin-top:10px;
         margin-left: 0.5vw;
@@ -104,13 +103,15 @@
       .drag-area img{
         width: 40vw;
         height: 45vh;
+        margin: 2px;
         object-fit: contain;
       }
-      #result_header{
+      #result_header,#result-body{
         color: white;
         margin-top: 6px;
         margin-left: 12px;
       }
+  
       @media screen and (max-width: 1500px){
         .drag-area header,.drag-area button,.drag-area span,.drag-area .icon{
           font-size: 40px;
@@ -143,7 +144,7 @@
         }
         .drag-area img{
         width: 90vw;
-      }
+        }
       }
     </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
@@ -169,6 +170,7 @@
       </div>
       <div id="result">
         <div id="result_header">Result</div>
+        <div id="result-body">No Results Available</div>
       </div>
     </div>
 
@@ -243,7 +245,7 @@
             }
           })
           .then(response => {
-            document.getElementById('result').innerHTML = response.data;
+            document.getElementById('result-body').innerHTML = response.data;
           })
           .catch(error => console.log(error));
         }
