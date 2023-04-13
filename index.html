@@ -38,6 +38,7 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        min-height: 500px;
       }
       #result{
         margin-left: 1vw;
@@ -100,44 +101,48 @@
         cursor: pointer;
       }
       .drag-area img{
-        height: 100%;
-        object-fit: cover;
+        width: 40vw;
+        height: 45vh;
+        object-fit: contain;
       }
       #result_header{
         color: white;
         margin-top: 6px;
         margin-left: 12px;
       }
-      @media screen and (max-width: 1000px){
-        /* .drag-area header,.drag-area button,.drag-area span,.drag-area .icon{
+      @media screen and (max-width: 1500px){
+        .drag-area header,.drag-area button,.drag-area span,.drag-area .icon{
           font-size: 40px;
-        } */
-        /* h1{
+        }
+        h1{
           font-size: 60px;
-        } */
+        }
         .main-body{
           flex-direction: column;
         }
-        .drag-area img{
-          height:fit-content;
-          width: fit-content;
-        }
         #result{
-          /* font-size: 45px; */
+          font-size: 45px;
           margin: 7vh 0 0 0;
           width: 90vw;
           height: fit-content;
+          max-width: 1000px;
+
         }
         .drag-area{
           margin: 0;
           width: 90vw;
+          max-width: 1000px;
         }
         #clear-btn,#predict-btn{
           width: 44.3vw;
           margin-top: 10px;
           padding: 10px 20px;
-          /* font-size: 40px; */
+          max-width: 490px;
+          font-size: 40px;
         }
+        .drag-area img{
+        width: 90vw;
+      }
       }
     </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
