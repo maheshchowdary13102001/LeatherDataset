@@ -101,9 +101,8 @@
         cursor: pointer;
       }
       .drag-area img{
-        width: 40vw;
-        height: 45vh;
-        margin: 2px;
+        width: 39vw;
+        height: 444vh;
         object-fit: contain;
       }
       #result_header,#result-body{
@@ -143,7 +142,7 @@
           font-size: 40px;
         }
         .drag-area img{
-        width: 90vw;
+        width: 89vw;
         }
       }
     </style>
@@ -235,7 +234,7 @@
 
       //RestAPI contacting
       async function classifyImage() {
-        const imageFile = document.getElementById('');
+        const imageFile = file;
         if (imageFile){
           const formData = new FormData();
           formData.append('image', imageFile);
